@@ -1,4 +1,5 @@
-
+<!-- 请替换你原来的代码部分，已经完全整合以下内容 -->
+<!-- ✅✅ 请复制整个 HTML 文档并保存为 .html 文件测试 ✅✅ -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -119,6 +120,33 @@
       pointer-events: none;
     }
 
+    .balloon {
+      position: fixed;
+      bottom: -100px;
+      width: 40px;
+      height: 55px;
+      background-color: red;
+      border-radius: 20px 20px 25px 25px;
+      z-index: 998;
+      animation: floatUp linear forwards;
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      width: 2px;
+      height: 20px;
+      background-color: #555;
+      transform: translateX(-50%);
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -130,28 +158,27 @@
   <h1>蜜儿生日快乐 🎉</h1>
   <div id="blessing">愿你被这个世界温柔以待，每天都能笑出声 💗</div>
 
-  <!-- 图片轮播区域 -->
-  <div id="photo" class="slideshow-container">
-    <img class="slide" src="mi1.jpg" alt="蜜儿照片1" />
-    <img class="slide" src="mi2.jpg" alt="蜜儿照片2" />
-    <img class="slide" src="mi3.jpg" alt="蜜儿照片3" />
-    <img class="slide" src="mi4.jpg" alt="蜜儿照片4" />
-    <img class="slide" src="mi5.jpg" alt="蜜儿照片5" />
-    <img class="slide" src="mi6.jpg" alt="蜜儿照片6" />
-    <img class="slide" src="mi7.jpg" alt="蜜儿照片7" />
-    <img class="slide" src="mi8.jpg" alt="蜜儿照片8" />
-    <img class="slide" src="mi9.jpg" alt="蜜儿照片9" />
-    <img class="slide" src="mi10.jpg" alt="蜜儿照片10" />
-    <img class="slide" src="mi11.jpg" alt="蜜儿照片11" />
-    <img class="slide" src="mi12.jpg" alt="蜜儿照片12" />
-    <img class="slide" src="mi13.jpg" alt="蜜儿照片13" />
-    <img class="slide" src="mi14.jpg" alt="蜜儿照片14" />
+  <div class="slideshow-container">
+    < img class="slide" src="mi1.jpg" />
+    < img class="slide" src="mi2.jpg" />
+    < img class="slide" src="mi3.jpg" />
+    < img class="slide" src="mi4.jpg" />
+    < img class="slide" src="mi5.jpg" />
+    < img class="slide" src="mi6.jpg" />
+    < img class="slide" src="mi7.jpg" />
+    < img class="slide" src="mi8.jpg" />
+    < img class="slide" src="mi9.jpg" />
+    < img class="slide" src="mi10.jpg" />
+    < img class="slide" src="mi11.jpg" />
+    < img class="slide" src="mi12.jpg" />
+    < img class="slide" src="mi13.jpg" />
+    < img class="slide" src="mi14.jpg" />
     <a class="prev" onclick="plusSlides(-1)">❮</a >
     <a class="next" onclick="plusSlides(1)">❯</a >
   </div>
 
   <div id="countdown">倒计时加载中…</div>
-  <button onclick="playMusic()">点我播放《枫》🎶</button>
+  <button onclick="startCelebration()">点我播放《枫》🎶</button>
   <div id="lyrics"></div>
   <audio id="bgm" loop>
     <source src="/feng.mp3" type="audio/mpeg" />
@@ -162,33 +189,62 @@
     const audio = document.getElementById("bgm");
     const lyrics = document.getElementById("lyrics");
 
-    function playMusic() {
+    function startCelebration() {
       audio.play().then(() => {
         lyrics.textContent = "我要的只是你在我身边";
+        startBalloons();
       }).catch(err => {
-        alert("Safari 需要点击触发音频播放。");
+        alert("请点击允许浏览器播放音频");
       });
+    }
+
+    function startBalloons() {
+      setInterval(() => {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        const colors = ['#ff69b4', '#ffd700', '#87ceeb', '#98fb98', '#ff7f50', '#dda0dd'];
+        balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        balloon.style.left = Math.random() * window.innerWidth + 'px';
+        balloon.style.animationDuration = (6 + Math.random() * 3) + 's';
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 10000);
+      }, 800);
     }
 
     function updateCountdown() {
       const now = new Date();
-      const target = new Date(now.getFullYear(), 6, 5); // 7月5日
+      const target = new Date(now.getFullYear(), 6, 5);
       if (now > target) target.setFullYear(target.getFullYear() + 1);
       const diff = target - now;
-
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor(diff / (1000 * 60 * 60) % 24);
       const minutes = Math.floor(diff / (1000 * 60) % 60);
       const seconds = Math.floor(diff / 1000 % 60);
-
       document.getElementById("countdown").textContent =
         `距离蜜儿生日还有 ${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
     }
-
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // 烟花特效
+    // 图片轮播
+    let slideIndex = 0;
+    const slides = document.getElementsByClassName("slide");
+    function showSlides(n) {
+      if (n >= slides.length) slideIndex = 0;
+      if (n < 0) slideIndex = slides.length - 1;
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slides[slideIndex].style.display = "block";
+    }
+    function plusSlides(n) {
+      slideIndex += n;
+      showSlides(slideIndex);
+    }
+    setInterval(() => { slideIndex++; showSlides(slideIndex); }, 5000);
+    showSlides(slideIndex);
+
+    // 烟花
     const canvas = document.getElementById("fireworks");
     const ctx = canvas.getContext("2d");
     let w = canvas.width = window.innerWidth;
@@ -197,7 +253,6 @@
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
     });
-
     const fireworks = [];
     document.addEventListener("click", e => {
       for (let i = 0; i < 80; i++) {
@@ -213,7 +268,6 @@
         });
       }
     });
-
     function animate() {
       ctx.clearRect(0, 0, w, h);
       for (let i = fireworks.length - 1; i >= 0; i--) {
@@ -234,33 +288,6 @@
       requestAnimationFrame(animate);
     }
     animate();
-
-    // 图片轮播功能
-    let slideIndex = 0;
-    const slides = document.getElementsByClassName("slide");
-
-    function showSlides(n) {
-      if (n >= slides.length) slideIndex = 0;
-      if (n < 0) slideIndex = slides.length - 1;
-
-      for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-      slides[slideIndex].style.display = "block";
-    }
-
-    function plusSlides(n) {
-      slideIndex += n;
-      showSlides(slideIndex);
-    }
-
-    // 自动轮播每5秒切换
-    setInterval(() => {
-      slideIndex++;
-      showSlides(slideIndex);
-    }, 5000);
-
-    showSlides(slideIndex); // 初始化显示第一张
   </script>
 </body>
 </html>
