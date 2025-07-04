@@ -39,41 +39,6 @@
       animation: fadeIn 3s ease 1s both;
     }
 
-    .slideshow-container {
-      position: relative;
-      max-width: 300px;
-      margin: 30px auto;
-    }
-
-    .slide {
-      display: none;
-      width: 100%;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
-      animation: fadeIn 1s ease;
-    }
-
-    .prev, .next {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 8px 12px;
-      color: white;
-      font-weight: bold;
-      font-size: 24px;
-      background-color: rgba(255, 105, 180, 0.6);
-      border-radius: 50%;
-      user-select: none;
-    }
-
-    .prev:hover, .next:hover {
-      background-color: #ff1493;
-    }
-
-    .prev { left: -40px; }
-    .next { right: -40px; }
-
     #countdown {
       font-size: 1.4em;
       margin-top: 20px;
@@ -96,13 +61,6 @@
       background-color: #ff1493;
     }
 
-    #lyrics {
-      margin-top: 20px;
-      font-size: 1.2em;
-      color: #8e24aa;
-      font-style: italic;
-    }
-
     .credit {
       position: fixed;
       bottom: 15px;
@@ -111,166 +69,47 @@
       color: #b25e99;
     }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 999;
-      pointer-events: none;
-    }
-
-    .balloon {
-      position: fixed;
-      bottom: -100px;
-      width: 40px;
-      height: 55px;
-      background-color: red;
-      border-radius: 20px 20px 25px 25px;
-      z-index: 998;
-      animation: floatUp linear forwards;
-    }
-
-    .balloon::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      width: 2px;
-      height: 20px;
-      background-color: #555;
-      transform: translateX(-50%);
-    }
-
-    @keyframes floatUp {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-120vh); opacity: 0; }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* 留言墙样式 */
-    #message-wall {
-      max-width: 400px;
-      margin: 30px auto 60px;
-      text-align: left;
-      background: rgba(255, 255, 255, 0.85);
-      padding: 15px 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(255,105,180,0.3);
-    }
-
-    #message-wall h2 {
-      color: #d63384;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    #contact-form input, #contact-form textarea {
-      width: 100%;
-      font-size: 1em;
-      padding: 8px 10px;
-      margin: 8px 0;
-      border: 1.5px solid #d63384;
-      border-radius: 8px;
-      font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
-      resize: vertical;
-    }
-
-    #contact-form button {
-      width: 100%;
-      background: #d63384;
-      border: none;
-      color: white;
-      padding: 10px 0;
-      font-size: 1.1em;
-      border-radius: 30px;
+    .diary-link {
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #ff69b4;
+      text-decoration: underline;
       cursor: pointer;
-      margin-top: 10px;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 4px 10px rgba(214,51,132,0.7);
-    }
-    #contact-form button:hover {
-      background-color: #a52057;
-    }
-
-    #form-status {
-      margin-top: 10px;
-      font-size: 1em;
-      color: #6f42c1;
-      text-align: center;
-      min-height: 24px;
     }
   </style>
 </head>
 <body>
   <canvas id="fireworks"></canvas>
-  <h1 onclick="window.location.href='diary.html'">蜜儿生日快乐 🎉</h1> <!-- 修改为跳转到日记页面 -->
+  <h1>蜜儿生日快乐 🎉</h1>
   <div id="blessing">愿你被这个世界温柔以待，每天都能笑出声 💗</div>
 
-  <div class="slideshow-container">
-    <img class="slide" src="mi1.jpg" />
-    <img class="slide" src="mi2.jpg" />
-    <img class="slide" src="mi3.jpg" />
-    <img class="slide" src="mi4.jpg" />
-    <img class="slide" src="mi5.jpg" />
-    <img class="slide" src="mi6.jpg" />
-    <img class="slide" src="mi7.jpg" />
-    <img class="slide" src="mi8.jpg" />
-    <img class="slide" src="mi9.jpg" />
-    <img class="slide" src="mi10.jpg" />
-    <img class="slide" src="mi11.jpg" />
-    <img class="slide" src="mi12.jpg" />
-    <img class="slide" src="mi13.jpg" />
-    <img class="slide" src="mi14.jpg" />
-    <a class="prev" onclick="plusSlides(-1)">❮</a >
-    <a class="next" onclick="plusSlides(1)">❯</a >
-  </div>
-
   <div id="countdown">倒计时加载中…</div>
-  <button onclick="startCelebration()">点我播放《枫》🎶</button>
-  <div id="lyrics"></div>
-  <audio id="bgm" loop>
-    <source src="/feng.mp3" type="audio/mpeg" />
-  </audio>
 
-  <div id="message-wall">
-    <h2>留言墙</h2>
-    <form id="contact-form">
-      <input type="text" name="from_name" placeholder="你的名字" required />
-      <textarea name="message" placeholder="写下你的祝福..." rows="4" required></textarea>
-      <button type="submit">发送留言</button>
-    </form>
-    <div id="form-status"></div>
-  </div>
+  <button onclick="startCelebration()">点我播放《枫》🎶</button>
+
+  <div class="diary-link" onclick="window.location.href='diary.html'">点击进入密语日记</div> <!-- 这里是添加的日记入口 -->
 
   <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    emailjs.init('J0M9Mc1uS1LlPMqUp'); // 你的 EmailJS Public Key
+    function updateCountdown() {
+      const now = new Date();
+      const target = new Date(now.getFullYear(), 6, 5);  // 假设目标日期是每年7月5日
+      if (now > target) target.setFullYear(target.getFullYear() + 1);
+      const diff = target - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(diff / (1000 * 60 * 60) % 24);
+      const minutes = Math.floor(diff / (1000 * 60) % 60);
+      const seconds = Math.floor(diff / 1000 % 60);
+      document.getElementById("countdown").textContent =
+        `距离蜜儿生日还有 ${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
+    }
+    setInterval(updateCountdown, 1000);  // 每秒更新一次倒计时
+    updateCountdown();  // 初始化倒计时
 
-    const form = document.getElementById('contact-form');
-    const statusDiv = document.getElementById('form-status');
-
-    form.addEventListener('submit', function(event) {
-      event.preventDefault(); // 阻止默认刷新
-
-      statusDiv.textContent = '正在发送...';
-
-      emailjs.sendForm('service_sgmxopd', 'template_wauxdt6', this)
-        .then(() => {
-          statusDiv.textContent = '留言发送成功！谢谢你的祝福💖';
-          form.reset();
-        }, (error) => {
-          statusDiv.textContent = '留言发送失败，请稍后再试。';
-          console.error('发送失败:', error);
-        });
-    });
-
-    // 下面是你原来的脚本，图片轮播、倒计时、烟花、气球、音乐
+    function startCelebration() {
+      alert("播放《枫》");  // 为了简化，暂时只用alert代替
+    }
   </script>
 </body>
 </html>
