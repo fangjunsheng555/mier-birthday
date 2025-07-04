@@ -29,7 +29,6 @@
       margin-top: 50px;
       animation: fadeIn 2s ease;
       text-shadow: 2px 2px 6px #ffb6c1;
-      cursor: pointer;
     }
 
     #blessing {
@@ -39,21 +38,116 @@
       animation: fadeIn 3s ease 1s both;
     }
 
-    /* 密语日记入口样式 */
-    #diaryLink {
-      font-size: 1.5em;
-      background: #d63384;
-      color: white;
-      padding: 10px 30px;
-      border-radius: 30px;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 20px;
-      transition: background 0.3s ease;
+    .slideshow-container {
+      position: relative;
+      max-width: 300px;
+      margin: 30px auto;
     }
 
-    #diaryLink:hover {
-      background: #ff1493;
+    .slide {
+      display: none;
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
+      animation: fadeIn 1s ease;
+    }
+
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 8px 12px;
+      color: white;
+      font-weight: bold;
+      font-size: 24px;
+      background-color: rgba(255, 105, 180, 0.6);
+      border-radius: 50%;
+      user-select: none;
+    }
+
+    .prev:hover, .next:hover {
+      background-color: #ff1493;
+    }
+
+    .prev { left: -40px; }
+    .next { right: -40px; }
+
+    #countdown {
+      font-size: 1.4em;
+      margin-top: 20px;
+      color: #6f42c1;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 12px 25px;
+      background: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255,105,180,0.6);
+      margin-top: 30px;
+    }
+
+    button:hover {
+      background-color: #ff1493;
+    }
+
+    #lyrics {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #8e24aa;
+      font-style: italic;
+    }
+
+    .credit {
+      position: fixed;
+      bottom: 15px;
+      width: 100%;
+      font-size: 0.9em;
+      color: #b25e99;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .balloon {
+      position: fixed;
+      bottom: -100px;
+      width: 40px;
+      height: 55px;
+      background-color: red;
+      border-radius: 20px 20px 25px 25px;
+      z-index: 998;
+      animation: floatUp linear forwards;
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      width: 2px;
+      height: 20px;
+      background-color: #555;
+      transform: translateX(-50%);
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* 留言墙样式 */
@@ -112,10 +206,7 @@
 </head>
 <body>
   <canvas id="fireworks"></canvas>
-  
-  <!-- 点击标题跳转到密语日记页面 -->
-  <h1 onclick="window.location.href='diary.html'">蜜儿生日快乐 🎉</h1>
-  
+  <h1>蜜儿生日快乐 🎉</h1>
   <div id="blessing">愿你被这个世界温柔以待，每天都能笑出声 💗</div>
 
   <div class="slideshow-container">
@@ -154,9 +245,6 @@
     <div id="form-status"></div>
   </div>
 
-  <!-- 密语日记入口在这里 -->
-  <a id="diaryLink" href="diary.html">进入密语日记 📖</a>
-
   <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
 
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -181,7 +269,110 @@
         });
     });
 
-    // 下面是你原来的脚本，图片轮播、倒计时、烟花、气球、音乐等
+    // 下面是你原来的脚本，图片轮播、倒计时、烟花、气球、音乐
+
+    const audio = document.getElementById("bgm");
+    const lyrics = document.getElementById("lyrics");
+
+    function startCelebration() {
+      audio.play().then(() => {
+        lyrics.textContent = "我要的只是你在我身边";
+        startBalloons();
+      }).catch(err => {
+        alert("请点击允许浏览器播放音频");
+      });
+    }
+
+    function startBalloons() {
+      setInterval(() => {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        const colors = ['#ff69b4', '#ffd700', '#87ceeb', '#98fb98', '#ff7f50', '#dda0dd'];
+        balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        balloon.style.left = Math.random() * window.innerWidth + 'px';
+        balloon.style.animationDuration = (6 + Math.random() * 3) + 's';
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 10000);
+      }, 800);
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const target = new Date(now.getFullYear(), 6, 5);
+      if (now > target) target.setFullYear(target.getFullYear() + 1);
+      const diff = target - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(diff / (1000 * 60 * 60) % 24);
+      const minutes = Math.floor(diff / (1000 * 60) % 60);
+      const seconds = Math.floor(diff / 1000 % 60);
+      document.getElementById("countdown").textContent =
+        `距离蜜儿生日还有 ${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // 图片轮播
+    let slideIndex = 0;
+    const slides = document.getElementsByClassName("slide");
+    function showSlides(n) {
+      if (n >= slides.length) slideIndex = 0;
+      if (n < 0) slideIndex = slides.length - 1;
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slides[slideIndex].style.display = "block";
+    }
+    function plusSlides(n) {
+      slideIndex += n;
+      showSlides(slideIndex);
+    }
+    setInterval(() => { slideIndex++; showSlides(slideIndex); }, 5000);
+    showSlides(slideIndex);
+
+    // 烟花
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    window.addEventListener("resize", () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+    const fireworks = [];
+    document.addEventListener("click", e => {
+      for (let i = 0; i < 80; i++) {
+        fireworks.push({
+          x: e.clientX,
+          y: e.clientY,
+          radius: 2,
+          angle: Math.random() * 2 * Math.PI,
+          speed: Math.random() * 5 + 2,
+          alpha: 1,
+          decay: Math.random() * 0.015 + 0.007,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`
+        });
+      }
+    });
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      for (let i = fireworks.length - 1; i >= 0; i--) {
+        const f = fireworks[i];
+        f.x += Math.cos(f.angle) * f.speed;
+        f.y += Math.sin(f.angle) * f.speed;
+        f.alpha -= f.decay;
+        if (f.alpha <= 0) {
+          fireworks.splice(i, 1);
+          continue;
+        }
+        ctx.globalAlpha = f.alpha;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = f.color;
+        ctx.fill();
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
   </script>
 </body>
 </html>
