@@ -35,35 +35,42 @@
       font-family: inherit;
       font-size: 16px;
     }
-    button {
+    /* 音乐播放器样式 */
+    #musicPlayer {
+      margin-top: 30px;
       background-color: #ff69b4;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: transform .2s;
-    }
-    button:active {
-      transform: scale(0.95);
-    }
-    .diary-entry {
-      background: white;
-      border-radius: 10px;
       padding: 12px;
-      margin-top: 15px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-align: left;
-    }
-    img, video {
-      max-width: 100%;
       border-radius: 8px;
-      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 350px;
+      margin: 30px auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    .meta-info {
-      font-size: 14px;
-      color: #888;
-      margin-top: 8px;
+    #playPauseBtn {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      transition: transform 0.3s;
     }
-    #bgm { display: none; }
+    #playPauseBtn:hover {
+      transform: scale(1.1);
+    }
+    .music-info {
+      color: white;
+      font-size: 18px;
+      text-align: center;
+    }
+    #location {
+      background: rgba(255,255,255,0.8);
+      border: none;
+      color: #555;
+      font-weight: bold;
+    }
     /* 漂浮爱心 */
     .heart {
       position: absolute;
@@ -77,25 +84,21 @@
       0% { transform: translateY(0) scale(1); opacity: 1; }
       100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
     }
-    /* 定位输入框：只读 */
-    #location {
-      background: rgba(255,255,255,0.8);
-      border: none;
-      color: #555;
-      font-weight: bold;
-    }
-    /* 历史日记标题 */
-    #historyTitle {
-      margin-top: 30px;
-      font-size: 20px;
-      color: #d63384;
-      text-shadow: 1px 1px 2px #ffc0cb;
-    }
   </style>
 </head>
 
 <body>
   <h2>🌸 蜜语日记 🌸</h2>
+
+  <!-- 音乐播放器 -->
+  <div id="musicPlayer">
+    <button id="playPauseBtn" onclick="togglePlayPause()">▶️</button>
+    <div class="music-info">
+      <div>背景音乐：《浪漫手机》</div>
+      <div id="currentStatus">点击任意位置开始播放</div>
+    </div>
+    <audio id="bgm" src="浪漫手机.mp3" loop></audio>
+  </div>
 
   <!-- 日记发表区 -->
   <div style="position: relative; text-align: left;">
@@ -145,31 +148,31 @@
     let currentCity = '未知城市';
     getLocationFromIP().then(city => currentCity = city);
 
-    // 背景爱心动画
-    setInterval(() => {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.textContent = '💖';
-      heart.style.left = Math.random() * 100 + '%';
-      heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }, 800);
+    // 播放/暂停BGM
+    const bgm = document.getElementById('bgm');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    let isPlaying = false;
 
-    // 播放 BGM
-    function playBgm() {
-      const bgm = document.getElementById('bgm');
-      bgm.style.display = 'block';
-      bgm.play();
+    function togglePlayPause() {
+      if (isPlaying) {
+        bgm.pause();
+        playPauseBtn.textContent = '▶️';  // 改为播放按钮
+        document.getElementById('currentStatus').textContent = '点击任意位置开始播放';
+      } else {
+        bgm.play();
+        playPauseBtn.textContent = '⏸️';  // 改为暂停按钮
+        document.getElementById('currentStatus').textContent = '音乐正在播放';
+      }
+      isPlaying = !isPlaying;
     }
 
-    // 监听页面点击，播放 BGM
+    // 监听页面点击，播放音乐
     document.body.addEventListener('click', function() {
-      const bgm = document.getElementById('bgm');
-      // 设置 audio 元素为未静音并开始播放
-      if (bgm.paused) {
-        bgm.muted = false; // 禁用静音
+      if (!isPlaying) {
         bgm.play();
+        playPauseBtn.textContent = '⏸️';  // 改为暂停按钮
+        document.getElementById('currentStatus').textContent = '音乐正在播放';
+        isPlaying = true;
       }
     });
 
