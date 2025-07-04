@@ -35,6 +35,19 @@
       font-family: inherit;
       font-size: 16px;
     }
+    /* 城市输入框样式（小号字体，左下角） */
+    .city-input {
+      position: absolute;
+      bottom: 178px; /* 根据 textarea 的位置微调 */
+      left: 20px;
+      width: calc(100% - 40px);
+      font-size: 12px;
+      color: #555;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: rgba(255,255,255,0.8);
+    }
     button {
       background-color: #ff69b4;
       color: white;
@@ -77,13 +90,6 @@
       0% { transform: translateY(0) scale(1); opacity: 1; }
       100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
     }
-    /* 定位输入框：只读 */
-    #location {
-      background: rgba(255,255,255,0.8);
-      border: none;
-      color: #555;
-      font-weight: bold;
-    }
     /* 历史日记标题 */
     #historyTitle {
       margin-top: 30px;
@@ -97,15 +103,12 @@
 <body>
   <h2>🌸 蜜语日记 🌸</h2>
 
-  <!-- BGM 播放 -->
-  <button onclick="playBgm()">播放背景音乐《浪漫手机》</button>
-  <audio id="bgm" src="浪漫手机.mp3" loop></audio>
-
-  <!-- 定位输入框（只读）-->
-  <input type="text" id="location" readonly placeholder="定位：获取中…">
-
   <!-- 日记发表区 -->
-  <textarea id="diaryContent" rows="4" placeholder="今天想记录些什么呢？"></textarea>
+  <div style="position: relative; text-align: left;">
+    <textarea id="diaryContent" rows="4" placeholder="今天想记录些什么呢？"></textarea>
+    <!-- 手动输入城市名，左下角小号字体 -->
+    <input type="text" id="location" class="city-input" placeholder="请输入城市名">
+  </div>
   <select id="mood">
     <option>😊 开心</option>
     <option>😢 难过</option>
@@ -165,6 +168,9 @@
       bgm.style.display = 'block';
       bgm.play();
     }
+
+    // 监听页面点击，播放 BGM
+    document.body.addEventListener('click', playBgm);
 
     // 提交日记
     async function submitDiary() {
