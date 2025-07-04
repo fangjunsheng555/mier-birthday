@@ -220,15 +220,15 @@
           const city    = d.get('location');
           const date    = d.createdAt.toLocaleString();
           const media   = d.get('mediaFiles') || [];
-          let html = <div class="diary-entry">
-                        <div>${content}</div>;
+          let html = `<div class="diary-entry">
+                        <div>${content}</div>`;
           media.forEach(f => {
             html += f.type.startsWith('image')
-              ? <img src="${f.url}">
-              : <video src="${f.url}" controls></video>;
+              ? `<img src="${f.url}">`
+              : `<video src="${f.url}" controls></video>`;
           });
-          html += <div class="meta-info">${mood} | ${city} | ${date}</div>
-                  </div>;
+          html += `<div class="meta-info">${mood} | ${city} | ${date}</div>
+                  </div>`;
           c.insertAdjacentHTML('beforeend', html);
         });
       });
