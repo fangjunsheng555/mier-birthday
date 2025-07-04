@@ -38,6 +38,14 @@
       animation: fadeIn 3s ease 1s both;
     }
 
+    #photo img {
+      margin-top: 20px;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
+    }
+
     #countdown {
       font-size: 1.4em;
       margin-top: 20px;
@@ -93,6 +101,12 @@
   <canvas id="fireworks"></canvas>
   <h1>蜜儿生日快乐 🎉</h1>
   <div id="blessing">愿你被这个世界温柔以待，每天都能笑出声 💗</div>
+
+  <!-- 插入图片区域 -->
+  <div id="photo">
+    < img src="mi.jpg" alt="蜜儿照片" />
+  </div>
+
   <div id="countdown">倒计时加载中…</div>
   <button onclick="playMusic()">点我播放《枫》🎶</button>
   <div id="lyrics"></div>
