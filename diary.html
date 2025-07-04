@@ -170,7 +170,14 @@
     }
 
     // 监听页面点击，播放 BGM
-    document.body.addEventListener('click', playBgm);
+    document.body.addEventListener('click', function() {
+      const bgm = document.getElementById('bgm');
+      // 设置 audio 元素为未静音并开始播放
+      if (bgm.paused) {
+        bgm.muted = false; // 禁用静音
+        bgm.play();
+      }
+    });
 
     // 提交日记
     async function submitDiary() {
@@ -221,26 +228,4 @@
         const c = document.getElementById('diaryList');
         c.innerHTML = '';
         results.forEach(d => {
-          const content = d.get('content');
-          const mood    = d.get('mood');
-          const city    = d.get('location');
-          const date    = d.createdAt.toLocaleString();
-          const media   = d.get('mediaFiles') || [];
-          let html = `<div class="diary-entry">
-                        <div>${content}</div>`;
-          media.forEach(f => {
-            html += f.type.startsWith('image')
-              ? `<img src="${f.url}">`
-              : `<video src="${f.url}" controls></video>`;
-          });
-          html += `<div class="meta-info">${mood} | ${city} | ${date}</div>
-                  </div>`;
-          c.insertAdjacentHTML('beforeend', html);
-        });
-      });
-    }
-
-    window.onload = loadDiaries;
-  </script>
-</body>
-</html>
+          const content = d.get('c
