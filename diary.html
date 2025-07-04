@@ -97,15 +97,12 @@
 <body>
   <h2>🌸 蜜语日记 🌸</h2>
 
-  <!-- BGM 播放 -->
-  <button onclick="playBgm()">播放背景音乐《浪漫手机》</button>
-  <audio id="bgm" src="浪漫手机.mp3" loop></audio>
-
-  <!-- 定位输入框（只读）-->
-  <input type="text" id="location" readonly placeholder="定位：获取中…">
-
   <!-- 日记发表区 -->
-  <textarea id="diaryContent" rows="4" placeholder="今天想记录些什么呢？"></textarea>
+  <div style="position: relative; text-align: left;">
+    <textarea id="diaryContent" rows="4" placeholder="今天想记录些什么呢？"></textarea>
+    <!-- 手动输入城市名，左下角小号字体 -->
+    <input type="text" id="location" class="city-input" placeholder="请输入城市名">
+  </div>
   <select id="mood">
     <option>😊 开心</option>
     <option>😢 难过</option>
@@ -165,6 +162,16 @@
       bgm.style.display = 'block';
       bgm.play();
     }
+
+    // 监听页面点击，播放 BGM
+    document.body.addEventListener('click', function() {
+      const bgm = document.getElementById('bgm');
+      // 设置 audio 元素为未静音并开始播放
+      if (bgm.paused) {
+        bgm.muted = false; // 禁用静音
+        bgm.play();
+      }
+    });
 
     // 提交日记
     async function submitDiary() {
