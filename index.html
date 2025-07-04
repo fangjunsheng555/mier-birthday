@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>蜜儿生日快乐 🎂</title>
   <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
   <style>
@@ -17,28 +17,33 @@
       color: #a0005b;
       overflow-x: hidden;
     }
+
     @keyframes gradient {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
     h1 {
       font-size: 3em;
       margin-top: 50px;
       animation: fadeIn 2s ease;
       text-shadow: 2px 2px 6px #ffb6c1;
     }
+
     #blessing {
       font-size: 1.8em;
       margin: 30px auto;
       color: #d63384;
       animation: fadeIn 3s ease 1s both;
     }
+
     .slideshow-container {
       position: relative;
       max-width: 300px;
       margin: 30px auto;
     }
+
     .slide {
       display: none;
       width: 100%;
@@ -46,6 +51,7 @@
       box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
       animation: fadeIn 1s ease;
     }
+
     .prev, .next {
       cursor: pointer;
       position: absolute;
@@ -59,14 +65,20 @@
       border-radius: 50%;
       user-select: none;
     }
-    .prev:hover, .next:hover { background-color: #ff1493; }
+
+    .prev:hover, .next:hover {
+      background-color: #ff1493;
+    }
+
     .prev { left: -40px; }
     .next { right: -40px; }
+
     #countdown {
       font-size: 1.4em;
       margin-top: 20px;
       color: #6f42c1;
     }
+
     button {
       font-size: 18px;
       padding: 12px 25px;
@@ -78,13 +90,18 @@
       box-shadow: 0 4px 15px rgba(255,105,180,0.6);
       margin-top: 30px;
     }
-    button:hover { background-color: #ff1493; }
+
+    button:hover {
+      background-color: #ff1493;
+    }
+
     #lyrics {
       margin-top: 20px;
       font-size: 1.2em;
       color: #8e24aa;
       font-style: italic;
     }
+
     .credit {
       position: fixed;
       bottom: 15px;
@@ -92,6 +109,7 @@
       font-size: 0.9em;
       color: #b25e99;
     }
+
     canvas {
       position: fixed;
       top: 0;
@@ -99,6 +117,7 @@
       z-index: 999;
       pointer-events: none;
     }
+
     .balloon {
       position: fixed;
       bottom: -100px;
@@ -109,6 +128,7 @@
       z-index: 998;
       animation: floatUp linear forwards;
     }
+
     .balloon::after {
       content: '';
       position: absolute;
@@ -119,47 +139,68 @@
       background-color: #555;
       transform: translateX(-50%);
     }
+
     @keyframes floatUp {
       0% { transform: translateY(0); opacity: 1; }
       100% { transform: translateY(-120vh); opacity: 0; }
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 留言板样式 */
-    #message-board {
-      margin: 60px auto;
+    /* 留言墙样式 */
+    #message-wall {
       max-width: 400px;
-      background: #fff0f8;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(255,105,180,0.2);
+      margin: 30px auto 60px;
       text-align: left;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(255,105,180,0.3);
     }
-    #message-board h2 {
-      color: #a0005b;
+
+    #message-wall h2 {
+      color: #d63384;
       text-align: center;
+      margin-bottom: 12px;
     }
-    #message-board input,
-    #message-board textarea {
+
+    #contact-form input, #contact-form textarea {
       width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ffb6c1;
-      margin-bottom: 10px;
-      font-family: inherit;
+      font-size: 1em;
+      padding: 8px 10px;
+      margin: 8px 0;
+      border: 1.5px solid #d63384;
+      border-radius: 8px;
+      font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+      resize: vertical;
     }
-    #message-board button {
+
+    #contact-form button {
       width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      background: #ff69b4;
-      color: white;
+      background: #d63384;
       border: none;
-      border-radius: 20px;
+      color: white;
+      padding: 10px 0;
+      font-size: 1.1em;
+      border-radius: 30px;
       cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 4px 10px rgba(214,51,132,0.7);
+    }
+    #contact-form button:hover {
+      background-color: #a52057;
+    }
+
+    #form-status {
+      margin-top: 10px;
+      font-size: 1em;
+      color: #6f42c1;
+      text-align: center;
+      min-height: 24px;
     }
   </style>
 </head>
@@ -194,49 +235,54 @@
     <source src="/feng.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- 留言墙 -->
-  <div id="message-board">
-    <h2>给蜜儿留言 💌</h2>
+  <div id="message-wall">
+    <h2>留言墙</h2>
     <form id="contact-form">
-      <label>你的名字：</label><br />
-      <input type="text" name="user_name" required /><br />
-      <label>你的留言：</label><br />
-      <textarea name="message" rows="4" required></textarea><br />
+      <input type="text" name="from_name" placeholder="你的名字" required />
+      <textarea name="message" placeholder="写下你的祝福..." rows="4" required></textarea>
       <button type="submit">发送留言</button>
     </form>
+    <div id="form-status"></div>
   </div>
 
   <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
 
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    (function() {
-      emailjs.init("J0M9Mc1uS1LlPMqUp");
-    })();
-    document.getElementById("contact-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      emailjs.sendForm('service_sgmxopd', 'template_wauxdt6', this).then(() => {
-        alert("留言已发送 💖");
-        this.reset();
-      }, err => {
-        alert("留言失败，请稍后重试");
-        console.error(err);
-      });
-    });
-  </script>
+    emailjs.init('J0M9Mc1uS1LlPMqUp'); // 你的 EmailJS Public Key
 
-  <script>
+    const form = document.getElementById('contact-form');
+    const statusDiv = document.getElementById('form-status');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // 阻止默认刷新
+
+      statusDiv.textContent = '正在发送...';
+
+      emailjs.sendForm('service_sgmxopd', 'template_wauxdt6', this)
+        .then(() => {
+          statusDiv.textContent = '留言发送成功！谢谢你的祝福💖';
+          form.reset();
+        }, (error) => {
+          statusDiv.textContent = '留言发送失败，请稍后再试。';
+          console.error('发送失败:', error);
+        });
+    });
+
+    // 下面是你原来的脚本，图片轮播、倒计时、烟花、气球、音乐
+
     const audio = document.getElementById("bgm");
     const lyrics = document.getElementById("lyrics");
+
     function startCelebration() {
       audio.play().then(() => {
         lyrics.textContent = "我要的只是你在我身边";
         startBalloons();
-      }).catch(() => {
+      }).catch(err => {
         alert("请点击允许浏览器播放音频");
       });
     }
+
     function startBalloons() {
       setInterval(() => {
         const balloon = document.createElement('div');
@@ -249,6 +295,7 @@
         setTimeout(() => balloon.remove(), 10000);
       }, 800);
     }
+
     function updateCountdown() {
       const now = new Date();
       const target = new Date(now.getFullYear(), 6, 5);
@@ -263,12 +310,16 @@
     }
     setInterval(updateCountdown, 1000);
     updateCountdown();
+
+    // 图片轮播
     let slideIndex = 0;
     const slides = document.getElementsByClassName("slide");
     function showSlides(n) {
       if (n >= slides.length) slideIndex = 0;
       if (n < 0) slideIndex = slides.length - 1;
-      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
       slides[slideIndex].style.display = "block";
     }
     function plusSlides(n) {
@@ -277,6 +328,8 @@
     }
     setInterval(() => { slideIndex++; showSlides(slideIndex); }, 5000);
     showSlides(slideIndex);
+
+    // 烟花
     const canvas = document.getElementById("fireworks");
     const ctx = canvas.getContext("2d");
     let w = canvas.width = window.innerWidth;
@@ -289,7 +342,9 @@
     document.addEventListener("click", e => {
       for (let i = 0; i < 80; i++) {
         fireworks.push({
-          x: e.clientX, y: e.clientY, radius: 2,
+          x: e.clientX,
+          y: e.clientY,
+          radius: 2,
           angle: Math.random() * 2 * Math.PI,
           speed: Math.random() * 5 + 2,
           alpha: 1,
