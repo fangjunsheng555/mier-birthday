@@ -152,7 +152,7 @@
       locInput.value = '定位：被拒绝';
     });
 
-    // 背景爱心动画
+    // 漂浮爱心动画
     setInterval(() => {
       const heart = document.createElement('div');
       heart.className = 'heart';
@@ -173,9 +173,9 @@
     // 提交日记
     async function submitDiary() {
       const content = document.getElementById('diaryContent').value.trim();
-      const mood = document.getElementById('mood').value;
-      const city = currentCity;
-      const files = document.getElementById('media').files;
+      const mood    = document.getElementById('mood').value;
+      const city    = currentCity;
+      const files   = document.getElementById('media').files;
       if (!content) return alert('先写点内容吧～');
 
       const Diary = AV.Object.extend('Diary');
@@ -184,6 +184,12 @@
       diary.set('mood', mood);
       diary.set('location', city);
 
+      // —— 公共可读 ACL —— 
+      const acl = new AV.ACL();
+      acl.setPublicReadAccess(true);
+      diary.setACL(acl);
+
+      // 上传图片/视频
       if (files.length) {
         const uploads = Array.from(files).map(f => {
           const avFile = new AV.File(f.name, f);
@@ -206,7 +212,7 @@
     // 加载历史日记
     function loadDiaries() {
       const Diary = AV.Object.extend('Diary');
-      const q = new AV.Query(Diary);
+      const q     = new AV.Query(Diary);
       q.descending('createdAt');
       q.limit(20);
       q.find().then(results => {
@@ -214,10 +220,10 @@
         c.innerHTML = '';
         results.forEach(d => {
           const content = d.get('content');
-          const mood = d.get('mood');
-          const city = d.get('location');
-          const date = d.createdAt.toLocaleString();
-          const media = d.get('mediaFiles') || [];
+          const mood    = d.get('mood');
+          const city    = d.get('location');
+          const date    = d.createdAt.toLocaleString();
+          const media   = d.get('mediaFiles') || [];
           let html = `<div class="diary-entry">
                         <div>${content}</div>`;
           media.forEach(f => {
