@@ -363,7 +363,7 @@
       document.getElementById('message-result').textContent = "正在发送，请稍候…";
       emailjs.sendForm('service_sgmxopd', 'template_wauxdt6', this)
         .then(function() {
-          document.getElementById('message-result').textContent = "留言发送成功！3秒后跳回主页…";
+          document.getElementById('message-result').textContent = "留言发送成功！";
           setTimeout(() => {
             window.location.href = "https://miforever.online";
           }, 3000);
