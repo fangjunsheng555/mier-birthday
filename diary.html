@@ -91,6 +91,15 @@
       color: #d63384;
       text-shadow: 1px 1px 2px #ffc0cb;
     }
+    /* 密码输入框 */
+    #password {
+      font-size: 16px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 100%;
+      margin-bottom: 12px;
+    }
   </style>
 </head>
 
@@ -103,6 +112,9 @@
 
   <!-- 定位输入框（只读）-->
   <input type="text" id="location" readonly placeholder="定位：获取中…">
+
+  <!-- 密码验证 -->
+  <input type="password" id="password" placeholder="请输入密码" />
 
   <!-- 日记发表区 -->
   <textarea id="diaryContent" rows="4" placeholder="今天想记录些什么呢？"></textarea>
@@ -148,17 +160,6 @@
     let currentCity = '未知城市';
     getLocationFromIP().then(city => currentCity = city);
 
-    // 背景爱心动画
-    setInterval(() => {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.textContent = '💖';
-      heart.style.left = Math.random() * 100 + '%';
-      heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }, 800);
-
     // 播放 BGM
     function playBgm() {
       const bgm = document.getElementById('bgm');
@@ -168,6 +169,15 @@
 
     // 提交日记
     async function submitDiary() {
+      const password = document.getElementById('password').value;
+      const correctPassword = '20200211'; // 正确的密码
+
+      // 验证密码
+      if (password !== correctPassword) {
+        alert('密码错误！请重新输入');
+        return; // 如果密码错误，停止提交
+      }
+
       const content = document.getElementById('diaryContent').value.trim();
       const mood    = document.getElementById('mood').value;
       const city    = currentCity;
