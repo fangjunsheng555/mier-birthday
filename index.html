@@ -29,7 +29,6 @@
       margin-top: 50px;
       animation: fadeIn 2s ease;
       text-shadow: 2px 2px 6px #ffb6c1;
-      cursor: pointer;
     }
 
     #blessing {
@@ -216,7 +215,7 @@
 </head>
 <body>
   <canvas id="fireworks"></canvas>
-  <h1 onclick="window.location.href='diary.html'">蜜儿生日快乐 🎉</h1>
+  <h1>蜜儿生日快乐 🎉</h1>
   <div id="blessing">愿你被这个世界温柔以待，每天都能笑出声 💗</div>
 
   <div class="slideshow-container">
@@ -255,8 +254,13 @@
     <div id="form-status"></div>
   </div>
 
+  <div class="diary-link">
+    <a href="diary.html" style="font-size: 1.5em;">点击进入密语日记</a>
+  </div>
+
   <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
 
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
     emailjs.init('J0M9Mc1uS1LlPMqUp'); // 你的 EmailJS Public Key
 
