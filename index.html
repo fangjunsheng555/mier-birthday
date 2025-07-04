@@ -38,23 +38,6 @@
       animation: fadeIn 3s ease 1s both;
     }
 
-    /* 密语日记入口样式 */
-    #diaryLink {
-      font-size: 1.5em;
-      background: #d63384;
-      color: white;
-      padding: 10px 30px;
-      border-radius: 30px;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 20px;
-      transition: background 0.3s ease;
-    }
-
-    #diaryLink:hover {
-      background: #ff1493;
-    }
-
     .slideshow-container {
       position: relative;
       max-width: 300px;
@@ -219,15 +202,30 @@
       text-align: center;
       min-height: 24px;
     }
+
+    /* 密语日记入口样式 */
+    #diaryLink {
+      font-size: 1.5em;
+      background: #d63384;
+      color: white;
+      padding: 10px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+
+    #diaryLink:hover {
+      background: #ff1493;
+    }
+
   </style>
 </head>
 <body>
   <canvas id="fireworks"></canvas>
   <h1>蜜儿生日快乐 🎉</h1>
   <div id="blessing">愿你被这个世界温柔以待，每天都能笑出声 💗</div>
-
-  <!-- 在此处添加密语日记入口 -->
-  <a id="diaryLink" href="diary.html">进入密语日记 📖</a>
 
   <div class="slideshow-container">
     <img class="slide" src="mi1.jpg" />
@@ -264,6 +262,9 @@
     </form>
     <div id="form-status"></div>
   </div>
+
+  <!-- 在留言墙下面添加密语日记入口 -->
+  <a id="diaryLink" href="diary.html">进入密语日记 📖</a>
 
   <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
 
