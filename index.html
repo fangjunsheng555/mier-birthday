@@ -202,12 +202,6 @@
       text-align: center;
       min-height: 24px;
     }
-
-    /* 日记入口样式 */
-    .diary-link {
-      font-size: 1.5em;
-      margin-top: 20px;
-    }
   </style>
 </head>
 <body>
@@ -251,11 +245,6 @@
     <div id="form-status"></div>
   </div>
 
-  <!-- 日记页面链接 -->
-  <div class="diary-link">
-    <a href="diary.html" style="font-size: 1.5em; color: #ff69b4; text-decoration: underline;">点击进入密语日记</a>
-  </div>
-
   <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
 
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -280,9 +269,36 @@
         });
     });
 
+    // 下面是你原来的脚本，图片轮播、倒计时、烟花、气球、音乐
+
+    const audio = document.getElementById("bgm");
+    const lyrics = document.getElementById("lyrics");
+
+    function startCelebration() {
+      audio.play().then(() => {
+        lyrics.textContent = "我要的只是你在我身边";
+        startBalloons();
+      }).catch(err => {
+        alert("请点击允许浏览器播放音频");
+      });
+    }
+
+    function startBalloons() {
+      setInterval(() => {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        const colors = ['#ff69b4', '#ffd700', '#87ceeb', '#98fb98', '#ff7f50', '#dda0dd'];
+        balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        balloon.style.left = Math.random() * window.innerWidth + 'px';
+        balloon.style.animationDuration = (6 + Math.random() * 3) + 's';
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 10000);
+      }, 800);
+    }
+
     function updateCountdown() {
       const now = new Date();
-      const target = new Date(now.getFullYear(), 6, 5); // 假设目标日期是每年7月5日
+      const target = new Date(now.getFullYear(), 6, 5);
       if (now > target) target.setFullYear(target.getFullYear() + 1);
       const diff = target - now;
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -295,9 +311,68 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    function startCelebration() {
-      alert("播放《枫》");
+    // 图片轮播
+    let slideIndex = 0;
+    const slides = document.getElementsByClassName("slide");
+    function showSlides(n) {
+      if (n >= slides.length) slideIndex = 0;
+      if (n < 0) slideIndex = slides.length - 1;
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slides[slideIndex].style.display = "block";
     }
+    function plusSlides(n) {
+      slideIndex += n;
+      showSlides(slideIndex);
+    }
+    setInterval(() => { slideIndex++; showSlides(slideIndex); }, 5000);
+    showSlides(slideIndex);
+
+    // 烟花
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    window.addEventListener("resize", () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+    const fireworks = [];
+    document.addEventListener("click", e => {
+      for (let i = 0; i < 80; i++) {
+        fireworks.push({
+          x: e.clientX,
+          y: e.clientY,
+          radius: 2,
+          angle: Math.random() * 2 * Math.PI,
+          speed: Math.random() * 5 + 2,
+          alpha: 1,
+          decay: Math.random() * 0.015 + 0.007,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`
+        });
+      }
+    });
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      for (let i = fireworks.length - 1; i >= 0; i--) {
+        const f = fireworks[i];
+        f.x += Math.cos(f.angle) * f.speed;
+        f.y += Math.sin(f.angle) * f.speed;
+        f.alpha -= f.decay;
+        if (f.alpha <= 0) {
+          fireworks.splice(i, 1);
+          continue;
+        }
+        ctx.globalAlpha = f.alpha;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = f.color;
+        ctx.fill();
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
   </script>
 </body>
 </html>
