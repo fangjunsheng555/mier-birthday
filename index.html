@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>蜜儿生日快乐 🎂</title>
   <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
   <style>
@@ -152,63 +152,57 @@
 
     /* 留言墙样式 */
     #message-wall {
-      margin: 60px auto;
       max-width: 400px;
-      background: #fff0f5cc;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px #d63384aa;
-      color: #a0005b;
-      font-weight: 600;
+      margin: 30px auto 60px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(255,105,180,0.3);
     }
 
     #message-wall h2 {
-      margin-bottom: 15px;
+      color: #d63384;
+      text-align: center;
+      margin-bottom: 12px;
     }
 
-    #message-wall input, #message-wall textarea {
-      padding: 10px;
-      width: 90%;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
+    #contact-form input, #contact-form textarea {
+      width: 100%;
       font-size: 1em;
+      padding: 8px 10px;
+      margin: 8px 0;
+      border: 1.5px solid #d63384;
+      border-radius: 8px;
       font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
       resize: vertical;
     }
 
-    #message-wall button {
-      width: 94%;
-      font-size: 18px;
-      padding: 12px 0;
-      background: #ff69b4;
-      color: white;
+    #contact-form button {
+      width: 100%;
+      background: #d63384;
       border: none;
+      color: white;
+      padding: 10px 0;
+      font-size: 1.1em;
       border-radius: 30px;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(255,105,180,0.6);
-      transition: background-color 0.3s ease;
-    }
-
-    #message-wall button:hover {
-      background-color: #ff1493;
-    }
-
-    #message-result {
       margin-top: 10px;
-      min-height: 1.5em;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 4px 10px rgba(214,51,132,0.7);
+    }
+    #contact-form button:hover {
+      background-color: #a52057;
+    }
+
+    #form-status {
+      margin-top: 10px;
+      font-size: 1em;
       color: #6f42c1;
-      font-weight: 700;
+      text-align: center;
+      min-height: 24px;
     }
   </style>
-
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
-  <script>
-    (function(){
-      emailjs.init("J0M9Mc1uS1LlPMqUp");
-    })();
-  </script>
 </head>
 <body>
   <canvas id="fireworks"></canvas>
@@ -216,20 +210,20 @@
   <div id="blessing">愿你被这个世界温柔以待，每天都能笑出声 💗</div>
 
   <div class="slideshow-container">
-    <img class="slide" src="mi1.jpg" />
-    <img class="slide" src="mi2.jpg" />
-    <img class="slide" src="mi3.jpg" />
-    <img class="slide" src="mi4.jpg" />
-    <img class="slide" src="mi5.jpg" />
-    <img class="slide" src="mi6.jpg" />
-    <img class="slide" src="mi7.jpg" />
-    <img class="slide" src="mi8.jpg" />
-    <img class="slide" src="mi9.jpg" />
-    <img class="slide" src="mi10.jpg" />
-    <img class="slide" src="mi11.jpg" />
-    <img class="slide" src="mi12.jpg" />
-    <img class="slide" src="mi13.jpg" />
-    <img class="slide" src="mi14.jpg" />
+    < img class="slide" src="mi1.jpg" />
+    < img class="slide" src="mi2.jpg" />
+    < img class="slide" src="mi3.jpg" />
+    < img class="slide" src="mi4.jpg" />
+    < img class="slide" src="mi5.jpg" />
+    < img class="slide" src="mi6.jpg" />
+    < img class="slide" src="mi7.jpg" />
+    < img class="slide" src="mi8.jpg" />
+    < img class="slide" src="mi9.jpg" />
+    < img class="slide" src="mi10.jpg" />
+    < img class="slide" src="mi11.jpg" />
+    < img class="slide" src="mi12.jpg" />
+    < img class="slide" src="mi13.jpg" />
+    < img class="slide" src="mi14.jpg" />
     <a class="prev" onclick="plusSlides(-1)">❮</a >
     <a class="next" onclick="plusSlides(1)">❯</a >
   </div>
@@ -240,20 +234,43 @@
   <audio id="bgm" loop>
     <source src="/feng.mp3" type="audio/mpeg" />
   </audio>
-  <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
 
-  <!-- 留言墙 -->
   <div id="message-wall">
-    <h2>留言墙 💌</h2>
+    <h2>留言墙</h2>
     <form id="contact-form">
-      <input type="text" name="user_name" placeholder="你的名字" required />
-      <textarea name="message" placeholder="想对蜜儿说的话…" required></textarea>
-      <button type="submit">发送留言 💖</button>
+      <input type="text" name="from_name" placeholder="你的名字" required />
+      <textarea name="message" placeholder="写下你的祝福..." rows="4" required></textarea>
+      <button type="submit">发送留言</button>
     </form>
-    <div id="message-result"></div>
+    <div id="form-status"></div>
   </div>
 
+  <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
+    emailjs.init('J0M9Mc1uS1LlPMqUp'); // 你的 EmailJS Public Key
+
+    const form = document.getElementById('contact-form');
+    const statusDiv = document.getElementById('form-status');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // 阻止默认刷新
+
+      statusDiv.textContent = '正在发送...';
+
+      emailjs.sendForm('service_sgmxopd', 'template_wauxdt6', this)
+        .then(() => {
+          statusDiv.textContent = '留言发送成功！谢谢你的祝福💖';
+          form.reset();
+        }, (error) => {
+          statusDiv.textContent = '留言发送失败，请稍后再试。';
+          console.error('发送失败:', error);
+        });
+    });
+
+    // 下面是你原来的脚本，图片轮播、倒计时、烟花、气球、音乐
+
     const audio = document.getElementById("bgm");
     const lyrics = document.getElementById("lyrics");
 
@@ -356,22 +373,6 @@
       requestAnimationFrame(animate);
     }
     animate();
-
-    // 留言墙发送逻辑
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      document.getElementById('message-result').textContent = "正在发送，请稍候…";
-      emailjs.sendForm('service_sgmxopd', 'template_wauxdt6', this)
-        .then(function() {
-          document.getElementById('message-result').textContent = "留言发送成功！";
-          setTimeout(() => {
-            window.location.href = "https://miforever.online";
-          }, 3000);
-        }, function(error) {
-          document.getElementById('message-result').textContent = "发送失败，请稍后再试 😢";
-          console.error('FAILED...', error);
-        });
-    });
   </script>
 </body>
 </html>
