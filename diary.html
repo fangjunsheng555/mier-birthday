@@ -35,42 +35,35 @@
       font-family: inherit;
       font-size: 16px;
     }
-    /* 音乐播放器样式 */
-    #musicPlayer {
-      margin-top: 30px;
+    button {
       background-color: #ff69b4;
-      padding: 12px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      max-width: 350px;
-      margin: 30px auto;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    #playPauseBtn {
-      background-color: transparent;
-      border: none;
       color: white;
-      font-size: 24px;
+      border: none;
       cursor: pointer;
-      transition: transform 0.3s;
+      transition: transform .2s;
     }
-    #playPauseBtn:hover {
-      transform: scale(1.1);
+    button:active {
+      transform: scale(0.95);
     }
-    .music-info {
-      color: white;
-      font-size: 18px;
-      text-align: center;
+    .diary-entry {
+      background: white;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: left;
     }
-    #location {
-      background: rgba(255,255,255,0.8);
-      border: none;
-      color: #555;
-      font-weight: bold;
+    img, video {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
     }
+    .meta-info {
+      font-size: 14px;
+      color: #888;
+      margin-top: 8px;
+    }
+    #bgm { display: none; }
     /* 漂浮爱心 */
     .heart {
       position: absolute;
@@ -84,28 +77,35 @@
       0% { transform: translateY(0) scale(1); opacity: 1; }
       100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
     }
+    /* 定位输入框：只读 */
+    #location {
+      background: rgba(255,255,255,0.8);
+      border: none;
+      color: #555;
+      font-weight: bold;
+    }
+    /* 历史日记标题 */
+    #historyTitle {
+      margin-top: 30px;
+      font-size: 20px;
+      color: #d63384;
+      text-shadow: 1px 1px 2px #ffc0cb;
+    }
   </style>
 </head>
 
 <body>
   <h2>🌸 蜜语日记 🌸</h2>
 
-  <!-- 音乐播放器 -->
-  <div id="musicPlayer">
-    <button id="playPauseBtn" onclick="togglePlayPause()">▶️</button>
-    <div class="music-info">
-      <div>背景音乐：《浪漫手机》</div>
-      <div id="currentStatus">点击任意位置开始播放</div>
-    </div>
-    <audio id="bgm" src="浪漫手机.mp3" loop></audio>
-  </div>
+  <!-- BGM 播放 -->
+  <button onclick="playBgm()">播放背景音乐《浪漫手机》</button>
+  <audio id="bgm" src="浪漫手机.mp3" loop></audio>
+
+  <!-- 定位输入框（只读）-->
+  <input type="text" id="location" readonly placeholder="定位：获取中…">
 
   <!-- 日记发表区 -->
-  <div style="position: relative; text-align: left;">
-    <textarea id="diaryContent" rows="4" placeholder="今天想记录些什么呢？"></textarea>
-    <!-- 手动输入城市名，左下角小号字体 -->
-    <input type="text" id="location" class="city-input" placeholder="请输入城市名">
-  </div>
+  <textarea id="diaryContent" rows="4" placeholder="今天想记录些什么呢？"></textarea>
   <select id="mood">
     <option>😊 开心</option>
     <option>😢 难过</option>
@@ -148,33 +148,23 @@
     let currentCity = '未知城市';
     getLocationFromIP().then(city => currentCity = city);
 
-    // 播放/暂停BGM
-    const bgm = document.getElementById('bgm');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    let isPlaying = false;
+    // 背景爱心动画
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '💖';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }, 800);
 
-    function togglePlayPause() {
-      if (isPlaying) {
-        bgm.pause();
-        playPauseBtn.textContent = '▶️';  // 改为播放按钮
-        document.getElementById('currentStatus').textContent = '点击任意位置开始播放';
-      } else {
-        bgm.play();
-        playPauseBtn.textContent = '⏸️';  // 改为暂停按钮
-        document.getElementById('currentStatus').textContent = '音乐正在播放';
-      }
-      isPlaying = !isPlaying;
+    // 播放 BGM
+    function playBgm() {
+      const bgm = document.getElementById('bgm');
+      bgm.style.display = 'block';
+      bgm.play();
     }
-
-    // 监听页面点击，播放音乐
-    document.body.addEventListener('click', function() {
-      if (!isPlaying) {
-        bgm.play();
-        playPauseBtn.textContent = '⏸️';  // 改为暂停按钮
-        document.getElementById('currentStatus').textContent = '音乐正在播放';
-        isPlaying = true;
-      }
-    });
 
     // 提交日记
     async function submitDiary() {
@@ -230,15 +220,15 @@
           const city    = d.get('location');
           const date    = d.createdAt.toLocaleString();
           const media   = d.get('mediaFiles') || [];
-          let html = `<div class="diary-entry">
-                        <div>${content}</div>`;
+          let html = <div class="diary-entry">
+                        <div>${content}</div>;
           media.forEach(f => {
             html += f.type.startsWith('image')
-              ? `<img src="${f.url}">`
-              : `<video src="${f.url}" controls></video>`;
+              ? <img src="${f.url}">
+              : <video src="${f.url}" controls></video>;
           });
-          html += `<div class="meta-info">${mood} | ${city} | ${date}</div>
-                  </div>`;
+          html += <div class="meta-info">${mood} | ${city} | ${date}</div>
+                  </div>;
           c.insertAdjacentHTML('beforeend', html);
         });
       });
