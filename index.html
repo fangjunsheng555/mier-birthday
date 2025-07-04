@@ -151,47 +151,64 @@
     }
 
     /* 留言墙样式 */
-    #messageWall {
-      max-width: 500px;
-      margin: 50px auto 100px;
-      padding: 15px;
+    #message-wall {
+      margin: 60px auto;
+      max-width: 400px;
+      background: #fff0f5cc;
+      padding: 20px;
       border-radius: 15px;
-      background: rgba(255, 192, 203, 0.15);
-      box-shadow: 0 4px 20px rgba(255, 105, 180, 0.2);
+      box-shadow: 0 0 10px #d63384aa;
       color: #a0005b;
-      font-size: 1.1em;
-      text-align: left;
+      font-weight: 600;
     }
-    #messageWall h2 {
-      text-align: center;
-      margin-bottom: 20px;
+
+    #message-wall h2 {
+      margin-bottom: 15px;
     }
-    #messageWall form textarea,
-    #messageWall form input[type="email"] {
-      width: 100%;
-      padding: 12px;
+
+    #message-wall input, #message-wall textarea {
+      padding: 10px;
+      width: 90%;
+      margin-bottom: 10px;
       border-radius: 10px;
-      border: 1px solid #ffc0cb;
-      font-size: 16px;
-      margin-bottom: 12px;
-      box-sizing: border-box;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
       resize: vertical;
     }
-    #messageWall form button {
-      font-size: 16px;
-      padding: 12px 25px;
+
+    #message-wall button {
+      width: 94%;
+      font-size: 18px;
+      padding: 12px 0;
       background: #ff69b4;
       color: white;
       border: none;
       border-radius: 30px;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(255,105,180,0.6);
-      width: 100%;
+      transition: background-color 0.3s ease;
     }
-    #messageWall form button:hover {
+
+    #message-wall button:hover {
       background-color: #ff1493;
     }
+
+    #message-result {
+      margin-top: 10px;
+      min-height: 1.5em;
+      color: #6f42c1;
+      font-weight: 700;
+    }
   </style>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("J0M9Mc1uS1LlPMqUp");
+    })();
+  </script>
 </head>
 <body>
   <canvas id="fireworks"></canvas>
@@ -218,29 +235,23 @@
   </div>
 
   <div id="countdown">倒计时加载中…</div>
-
   <button onclick="startCelebration()">点我播放《枫》🎶</button>
   <div id="lyrics"></div>
-
-  <!-- 留言墙开始 -->
-  <div id="messageWall">
-    <h2>留言墙 💬</h2>
-    <form action="https://formsubmit.co/1120250670@qq.com" method="POST" target="_self">
-      <textarea name="message" rows="4" placeholder="在这里写下你对蜜儿的祝福吧…" required></textarea>
-      <input type="email" name="from" placeholder="你的邮箱（可选）" />
-      <input type="hidden" name="_subject" value="蜜儿生日留言" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_next" value="https://miforever.online" />
-      <button type="submit">发送 📬</button>
-    </form>
-  </div>
-  <!-- 留言墙结束 -->
-
   <audio id="bgm" loop>
     <source src="/feng.mp3" type="audio/mpeg" />
   </audio>
-
   <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
+
+  <!-- 留言墙 -->
+  <div id="message-wall">
+    <h2>留言墙 💌</h2>
+    <form id="contact-form">
+      <input type="text" name="user_name" placeholder="你的名字" required />
+      <textarea name="message" placeholder="想对蜜儿说的话…" required></textarea>
+      <button type="submit">发送留言 💖</button>
+    </form>
+    <div id="message-result"></div>
+  </div>
 
   <script>
     const audio = document.getElementById("bgm");
@@ -345,6 +356,22 @@
       requestAnimationFrame(animate);
     }
     animate();
+
+    // 留言墙发送逻辑
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('message-result').textContent = "正在发送，请稍候…";
+      emailjs.sendForm('service_sgmxopd', 'template_wauxdt6', this)
+        .then(function() {
+          document.getElementById('message-result').textContent = "留言发送成功！3秒后跳回主页…";
+          setTimeout(() => {
+            window.location.href = "https://miforever.online";
+          }, 3000);
+        }, function(error) {
+          document.getElementById('message-result').textContent = "发送失败，请稍后再试 😢";
+          console.error('FAILED...', error);
+        });
+    });
   </script>
 </body>
 </html>
