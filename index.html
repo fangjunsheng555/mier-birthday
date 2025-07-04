@@ -1,5 +1,3 @@
-<!-- 请替换你原来的代码部分，已经完全整合以下内容 -->
-<!-- ✅✅ 请复制整个 HTML 文档并保存为 .html 文件测试 ✅✅ -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -151,6 +149,48 @@
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* 留言墙样式 */
+    #messageWall {
+      max-width: 500px;
+      margin: 50px auto 100px;
+      padding: 15px;
+      border-radius: 15px;
+      background: rgba(255, 192, 203, 0.15);
+      box-shadow: 0 4px 20px rgba(255, 105, 180, 0.2);
+      color: #a0005b;
+      font-size: 1.1em;
+      text-align: left;
+    }
+    #messageWall h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #messageWall form textarea,
+    #messageWall form input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ffc0cb;
+      font-size: 16px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    #messageWall form button {
+      font-size: 16px;
+      padding: 12px 25px;
+      background: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255,105,180,0.6);
+      width: 100%;
+    }
+    #messageWall form button:hover {
+      background-color: #ff1493;
+    }
   </style>
 </head>
 <body>
@@ -178,11 +218,28 @@
   </div>
 
   <div id="countdown">倒计时加载中…</div>
+
   <button onclick="startCelebration()">点我播放《枫》🎶</button>
   <div id="lyrics"></div>
+
+  <!-- 留言墙开始 -->
+  <div id="messageWall">
+    <h2>留言墙 💬</h2>
+    <form action="https://formsubmit.co/1120250670@qq.com" method="POST" target="_self">
+      <textarea name="message" rows="4" placeholder="在这里写下你对蜜儿的祝福吧…" required></textarea>
+      <input type="email" name="from" placeholder="你的邮箱（可选）" />
+      <input type="hidden" name="_subject" value="蜜儿生日留言" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_next" value="https://miforever.online" />
+      <button type="submit">发表并发送到我邮箱 📬</button>
+    </form>
+  </div>
+  <!-- 留言墙结束 -->
+
   <audio id="bgm" loop>
     <source src="/feng.mp3" type="audio/mpeg" />
   </audio>
+
   <div class="credit">miForever · 你在我身边，是我最大的幸运</div>
 
   <script>
